@@ -1,27 +1,42 @@
 @startuml
-'https://plantuml.com/class-diagram
 
-abstract class AbstractList
-abstract AbstractCollection
-interface List
-interface Collection
-
-List <|-- AbstractList
-Collection <|-- AbstractCollection
-
-Collection <|- List
-AbstractCollection <|- AbstractList
-AbstractList <|-- ArrayList
-
-class ArrayList {
-Object[] elementData
-size()
+class Salle {
+- idSalle : int
+- nom : string
+- nombrePlaces : int
 }
 
-enum TimeUnit {
-DAYS
-HOURS
-MINUTES
+class Sceance {
+- idSceance : int
+- dateProjection : date
+- tarifNormal : float
+- tarifReduit : float
 }
+
+class Film {
+- idFilm : int
+- titre : string
+- duree : int
+}
+
+class User {
+- idUser : int
+- username : string
+- password : string
+- role : string
+}
+
+class Reservation {
+- idResa : int
+- NombrePlaceResa : int
+- dateResa : date
+- montantTotal : float
+}
+
+
+Sceance "0..*"--> "1..1" Film : projecte
+Sceance "1..1" --> "1..1" Salle : se deroule
+User "0..1" --> "0..*" Reservation : realise
+Reservation "1..*" --> "1..1" Sceance : concerne
 
 @enduml
