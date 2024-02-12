@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -27,6 +29,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    #[ORM\OneToMany(mappedBy: 'users', targetEntity: Reservation::class)]
+    private Collection $Reservation;
+
+    public function __construct()
+    {
+        $this->Reservation = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -96,5 +106,29 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * @return Collection<int, Reservation>
+     */
+    public function getReservation(): Collection
+    {
+        return $this->Reservation;
+    }
+
+    public function addReservation(Reservation $reservation): static
+    {
+        if (!$this->Reservation->contains($reservation)) {
+            $this->Reservation->add($reservation);
+        }
+
+        return $this;
+    }
+
+    public function removeReservation(Reservation $reservation): static
+    {
+        $this->Reservation->removeElement($reservation);
+
+        return $this;
     }
 }

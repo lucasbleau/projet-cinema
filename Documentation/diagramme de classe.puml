@@ -6,8 +6,8 @@ class Salle {
 - nombrePlaces : int
 }
 
-class Sceance {
-- idSceance : int
+class Séance {
+- idSéance : int
 - dateProjection : date
 - tarifNormal : float
 - tarifReduit : float
@@ -34,9 +34,9 @@ class Reservation {
 }
 
 
-Sceance "0..*"--> "1..1" Film : projecte
-Sceance "1..1" --> "1..1" Salle : se deroule
+Séance "0..*"--> "1..1" Film : projecte
+Séance "1..1" --> "1..1" Salle : se deroule
 User "0..1" --> "0..*" Reservation : realise
-Reservation "1..*" --> "1..1" Sceance : concerne
+Reservation "1..*" --> "1..1" Séance : concerne
 
 @enduml
