@@ -6,6 +6,7 @@ use App\Repository\FilmRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: FilmRepository::class)]
 class Film
@@ -13,15 +14,19 @@ class Film
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['listFilmsAffiche', 'detail'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 150)]
+    #[Groups(['listFilmsAffiche', 'detail'])]
     private ?string $titreFilm = null;
 
     #[ORM\Column]
+    #[Groups(['listFilmsAffiche', 'detail'])]
     private ?int $dureeFilm = null;
 
     #[ORM\OneToMany(mappedBy: 'Film', targetEntity: Seance::class)]
+    #[Groups(['detail'])]
     private Collection $seances;
 
     public function __construct()
