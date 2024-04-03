@@ -35,39 +35,17 @@ class FilmRepository extends ServiceEntityRepository
 
     public function detailFilm(int $idFilm) : Array
     {
+        $date = new \DateTime();
         return $this->createQueryBuilder('f')
-            ->innerJoin(Seance::class, 's', 'WITH', "s.Film = f.id")
+            ->leftJoin('f.seances', 's')
+            ->addSelect('s')
             ->where('f.id = :id')
+            ->andWhere('s.dateProjection >= :date')
             ->setParameter('id', $idFilm)
+            ->setParameter('date', $date)
             ->orderBy('s.dateProjection', 'ASC')
             ->getQuery()
             ->getResult()
         ;
     }
-
-
-//    /**
-//     * @return Film[] Returns an array of Film objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('f.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
-
-//    public function findOneBySomeField($value): ?Film
-//    {
-//        return $this->createQueryBuilder('f')
-//            ->andWhere('f.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
 }
