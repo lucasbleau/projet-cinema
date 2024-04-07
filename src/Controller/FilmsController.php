@@ -13,7 +13,7 @@ use Symfony\Component\Serializer\SerializerInterface;
 class FilmsController extends AbstractController
 {
     #[Route('/listerFilmsAffiche', name: 'app_lister_films_affiche')]
-    public function index(FilmRepository $filmRepository, SerializerInterface $serializer)
+    public function index(FilmRepository $filmRepository, SerializerInterface $serializer): Response
     {
         $filmsAffiche = $filmRepository->ListerFilmsAffiche();
         $filmsSerialized = $serializer->serialize($filmsAffiche, 'json', ['groups' => 'listFilmsAffiche']);
@@ -23,7 +23,7 @@ class FilmsController extends AbstractController
     }
 
     #[Route('/detail-film/{id}', name: 'app_detail_film')]
-    public function detailFilm(FilmRepository $filmRepository, SerializerInterface $serializer, int $id)
+    public function detailFilm(FilmRepository $filmRepository, SerializerInterface $serializer, int $id): Response
     {
         $film = $filmRepository->detailFilm($id);
         $filmsSerialized = $serializer->serialize($film, 'json', ['groups' => 'detail']);
