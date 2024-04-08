@@ -23,15 +23,18 @@ class Seance
     private ?\DateTimeInterface $dateProjection = null;
 
     #[ORM\Column]
+    #[Groups(['detail'])]
     private ?float $tarifNormal = null;
 
     #[ORM\Column]
+    #[Groups(['detail'])]
     private ?float $tarifReduit = null;
 
     #[ORM\OneToMany(mappedBy: 'Seance', targetEntity: Reservation::class)]
     private Collection $reservations;
 
     #[ORM\ManyToOne(targetEntity: Salle::class, inversedBy: 'seances')]
+    #[Groups(['detail'])]
     private Salle $Salle;
 
     #[ORM\ManyToOne(targetEntity: Film::class, inversedBy: 'seances')]

@@ -20,9 +20,9 @@ class SeanceFixtures extends Fixture implements DependentFixtureInterface
 
             $seance = new Seance();
             $seance->setDateProjection($faker->dateTimeBetween("now", "+20 days"));
-            $tarif = random_int(600, 1000) / 100 ;
+            $tarif = ceil(random_int(600, 1000) / 100) ;
             $seance->setTarifNormal($tarif);
-            $seance->setTarifReduit($tarif * 0.8) ;
+            $seance->setTarifReduit(ceil($tarif * 0.8)) ;
             $seance->setFilm($this->getReference("Film".$i));
             $seance->setSalle($this->getReference("Salle".$i));
             $manager->persist($seance);
