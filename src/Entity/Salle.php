@@ -6,6 +6,7 @@ use App\Repository\SalleRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: SalleRepository::class)]
 class Salle
@@ -16,9 +17,11 @@ class Salle
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Groups(['detail'])]
     private ?string $nomSalle = null;
 
     #[ORM\Column]
+    #[Groups(['detail'])]
     private ?int $nombresPlaces = null;
 
 

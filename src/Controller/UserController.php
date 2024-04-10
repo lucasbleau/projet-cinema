@@ -43,4 +43,10 @@ class UserController extends AbstractController
             return new JsonResponse($e->getMessage(), 400);
         }
     }
+
+    #[Route('/connexion', name: 'app_connexion')]
+    public function connexion()
+    {
+
+    }
 }
