@@ -3,10 +3,11 @@
 namespace App\Controller;
 
 use App\Repository\UserRepository;
+use App\Service\ConnecterUser;
 use App\Service\CreerUser;
 use App\Service\CreerUserRequete;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Client\Request;
+use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -14,6 +15,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 #[Route('/api')]
 class UserController extends AbstractController
@@ -45,8 +48,25 @@ class UserController extends AbstractController
     }
 
     #[Route('/connexion', name: 'app_connexion')]
-    public function connexion()
-    {
+    public function connexion(\Symfony\Component\HttpFoundation\Request $request, UserRepository $userRepository, JWTTokenManagerInterface $jwtManager): Response {
 
+        $donnees = json_decode($request->getContent(), true);
+
+        $email = $donnees['email'];
+        $password = $donnees['password'];
+
+        $user = $userRepository->findOneBy(['email' => $email]);
+
+        // Vérifier si l'utilisateur existe et si le mot de passe est correct
+        if (!$user || !password_verify($password, $user->getPassword())) {
+            return new JsonResponse(['message' => 'Email ou mot de passe incorrect.'], Response::HTTP_UNAUTHORIZED);
+        }
+
+        // Générer le token JWT
+        $token = $jwtManager->create($user);
+
+        // Retourner une réponse avec le token
+        return new JsonResponse(['token' => $token], Response::HTTP_OK);
     }
+
 }

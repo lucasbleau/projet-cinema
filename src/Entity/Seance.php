@@ -34,7 +34,7 @@ class Seance
     private Collection $reservations;
 
     #[ORM\ManyToOne(targetEntity: Salle::class, inversedBy: 'seances')]
-    #[Groups(['detail'])]
+//    #[Groups(['detail'])]
     private Salle $Salle;
 
     #[ORM\ManyToOne(targetEntity: Film::class, inversedBy: 'seances')]
