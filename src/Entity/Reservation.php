@@ -25,107 +25,106 @@ class Reservation
     #[ORM\Column]
     private ?float $montantTotal = null;
 
-    #[ORM\ManyToOne(targetEntity: Seance::class, inversedBy: 'reservations')]
-    private Collection $Seance;
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    private ?Seance $Seance;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'Reservation')]
-    private Collection $users;
+    #[ORM\ManyToOne(inversedBy: 'Reservation')]
+    private ?User $users;
 
-    public function __construct()
-    {
-        $this->Seance = new ArrayCollection();
-        $this->users = new ArrayCollection();
-    }
-
+    /**
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * @param int|null $id
+     */
+    public function setId(?int $id): void
+    {
+        $this->id = $id;
+    }
+
+    /**
+     * @return int|null
+     */
     public function getNombrePlaceResa(): ?int
     {
         return $this->nombrePlaceResa;
     }
 
-    public function setNombrePlaceResa(int $nombrePlaceResa): static
+    /**
+     * @param int|null $nombrePlaceResa
+     */
+    public function setNombrePlaceResa(?int $nombrePlaceResa): void
     {
         $this->nombrePlaceResa = $nombrePlaceResa;
-
-        return $this;
     }
 
+    /**
+     * @return \DateTimeInterface|null
+     */
     public function getDateResa(): ?\DateTimeInterface
     {
         return $this->dateResa;
     }
 
-    public function setDateResa(\DateTimeInterface $dateResa): static
+    /**
+     * @param \DateTimeInterface|null $dateResa
+     */
+    public function setDateResa(?\DateTimeInterface $dateResa): void
     {
         $this->dateResa = $dateResa;
-
-        return $this;
     }
 
+    /**
+     * @return float|null
+     */
     public function getMontantTotal(): ?float
     {
         return $this->montantTotal;
     }
 
-    public function setMontantTotal(float $montantTotal): static
+    /**
+     * @param float|null $montantTotal
+     */
+    public function setMontantTotal(?float $montantTotal): void
     {
         $this->montantTotal = $montantTotal;
-
-        return $this;
     }
 
     /**
-     * @return Collection<int, Seance>
+     * @return Seance|null
      */
-    public function getSeance(): Collection
+    public function getSeance(): ?Seance
     {
         return $this->Seance;
     }
 
-    public function addSeance(Seance $seance): static
+    /**
+     * @param Seance|null $Seance
+     */
+    public function setSeance(?Seance $Seance): void
     {
-        if (!$this->Seance->contains($seance)) {
-            $this->Seance->add($seance);
-        }
-
-        return $this;
-    }
-
-    public function removeSeance(Seance $seance): static
-    {
-        $this->Seance->removeElement($seance);
-
-        return $this;
+        $this->Seance = $Seance;
     }
 
     /**
-     * @return Collection<int, User>
+     * @return User|null
      */
-    public function getUsers(): Collection
+    public function getUsers(): ?User
     {
         return $this->users;
     }
 
-    public function addUser(User $user): static
+    /**
+     * @param User|null $users
+     */
+    public function setUsers(?User $users): void
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addReservation($this);
-        }
-
-        return $this;
+        $this->users = $users;
     }
 
-    public function removeUser(User $user): static
-    {
-        if ($this->users->removeElement($user)) {
-            $user->removeReservation($this);
-        }
-
-        return $this;
-    }
 }

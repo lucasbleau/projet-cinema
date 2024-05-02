@@ -16,7 +16,6 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 #[Route('/api')]
 class UserController extends AbstractController
@@ -26,6 +25,7 @@ class UserController extends AbstractController
     {
         // récupere les données de la requete sous form de tableau
         $donnees = json_decode($request->getContent(), true);
+
         // Création des classes
         $requete = new CreerUserRequete($donnees["email"],$donnees["password"]);
         $creerUser = new CreerUser($validateur,$userRepository,$entityManager);
@@ -59,7 +59,7 @@ class UserController extends AbstractController
 
         // Vérifier si l'utilisateur existe et si le mot de passe est correct
         if (!$user || !password_verify($password, $user->getPassword())) {
-            return new JsonResponse(['message' => 'Email ou mot de passe incorrect.'], Response::HTTP_UNAUTHORIZED);
+            return new JsonResponse('Email ou mot de passe incorrect', Response::HTTP_UNAUTHORIZED);
         }
 
         // Générer le token JWT
