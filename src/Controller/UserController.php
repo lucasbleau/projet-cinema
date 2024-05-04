@@ -21,7 +21,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 class UserController extends AbstractController
 {
     #[Route('/inscription', name: 'app_inscription')]
-    public function inscription(\Symfony\Component\HttpFoundation\Request $request,ValidatorInterface $validateur,UserRepository $userRepository,EntityManagerInterface $entityManager,SerializerInterface $serializer): Response|JsonResponse
+    public function inscription(\Symfony\Component\HttpFoundation\Request $request,ValidatorInterface $validateur,
+                                UserRepository $userRepository,EntityManagerInterface $entityManager,
+                                SerializerInterface $serializer): Response|JsonResponse
     {
         // récupere les données de la requete sous form de tableau
         $donnees = json_decode($request->getContent(), true);

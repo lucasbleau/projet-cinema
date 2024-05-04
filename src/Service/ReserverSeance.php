@@ -13,12 +13,13 @@ use http\Env\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use function PHPUnit\Framework\throwException;
 
-class RerserverSeance
+class ReserverSeance
 {
     private ValidatorInterface $validateur;
     private UserRepository $userRepository;
-    private SeanceRepository $seanceRepository
+    private SeanceRepository $seanceRepository;
     private EntityManagerInterface $entityManager;
+    private ReservationRepository $reservationRepository;
 
     public function __construct(ValidatorInterface $validateur,UserRepository $userRepository,
                                 SeanceRepository $seanceRepository, ReservationRepository $reservationRepository,
@@ -28,6 +29,7 @@ class RerserverSeance
         $this->userRepository = $userRepository;
         $this->entityManager = $entityManager;
         $this->seanceRepository = $seanceRepository;
+        $this->reservationRepository = $reservationRepository;
     }
 
     /**
@@ -75,7 +77,6 @@ class RerserverSeance
             throw new Exception("L'utilisateur n'a pas le role user");
         }
 
-
         // seance existe
         $seanceId = $requete->seanceId;
         $seanceExist = $this->seanceRepository->findOneBy(["id" => $seanceId]);
@@ -92,8 +93,12 @@ class RerserverSeance
         }
 
         // nombre place resa <= nombre place dispo
+        $nombrePlacesRestantes = $this->reservationRepository->recupNbPlacesDispo($seanceId);
+        $nombrePlaceDispo = $seanceExist->getSalle()->getNombresPlaces();
 
-
+        if ($nombrePlacesRestantes['places_restantes'] < $nombrePlaceDispo) {
+            throw new \Exception('Pas asser de places disponibles !');
+        }
 
         $reservation = new Reservation();
         $reservation->setSeance($seanceExist);
@@ -108,4 +113,5 @@ class RerserverSeance
 
         return $reservation;
     }
+
 }

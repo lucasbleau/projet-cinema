@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Attribute\Groups;
 
 #[ORM\Entity(repositoryClass: ReservationRepository::class)]
 class Reservation
@@ -17,18 +18,23 @@ class Reservation
     private ?int $id = null;
 
     #[ORM\Column]
+    #[Groups(['reservation'])]
     private ?int $nombrePlaceResa = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['reservation'])]
     private ?\DateTimeInterface $dateResa = null;
 
     #[ORM\Column]
+    #[Groups(['reservation'])]
     private ?float $montantTotal = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
+    #[Groups(['reservation'])]
     private ?Seance $Seance;
 
     #[ORM\ManyToOne(inversedBy: 'Reservation')]
+    #[Groups(['reservation'])]
     private ?User $users;
 
     /**

@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Reservation;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
+use Doctrine\ORM\NoResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -23,4 +25,21 @@ class ReservationRepository extends ServiceEntityRepository
 
     // requete qui recupere le nombre de place dispo
 
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function recupNbPlacesDispo(int $idSeance): array
+    {
+        $date = new \DateTime();
+        return $this->createQueryBuilder('s')
+            ->select('SUM(r.nombrePlaceResa) AS places_reservees')
+            ->leftJoin('s.reservations', 'r')
+            ->where('s.id = :idSeance')
+            ->andWhere('s.dateProjection >= :date')
+            ->setParameter('idSeance', $idSeance)
+            ->setParameter('date', $date)
+            ->getQuery()
+            ->getSingleResult();
+    }
 }
