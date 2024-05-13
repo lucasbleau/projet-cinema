@@ -29,17 +29,33 @@ class ReservationRepository extends ServiceEntityRepository
      * @throws NonUniqueResultException
      * @throws NoResultException
      */
-    public function recupNbPlacesDispo(int $idSeance): array
+//    public function recupNbPlacesDispo(int $idSeance): array
+//    {
+//        $date = new \DateTime();
+//        return $this->createQueryBuilder('s')
+//            ->select('SUM(r.nombrePlaceResa) AS places_reservees')
+//            ->leftJoin('s.reservations', 'r')
+//            ->where('s.id = :idSeance')
+//            ->andWhere('s.dateProjection >= :date')
+//            ->setParameter('idSeance', $idSeance)
+//            ->setParameter('date', $date)
+//            ->getQuery()
+//            ->getSingleResult();
+//    }
+
+    /**
+     * @throws NonUniqueResultException
+     * @throws NoResultException
+     */
+    public function findNbPlaceReserverByIdSeance(int $idSeance): int|null
     {
-        $date = new \DateTime();
-        return $this->createQueryBuilder('s')
-            ->select('SUM(r.nombrePlaceResa) AS places_reservees')
-            ->leftJoin('s.reservations', 'r')
-            ->where('s.id = :idSeance')
-            ->andWhere('s.dateProjection >= :date')
+        return $this->createQueryBuilder('r')
+            ->select('SUM(r.nombrePlaceResa) as nbPlace')
+            ->leftJoin('r.Seance', 's')
+            ->andWhere('r.Seance = :idSeance')
             ->setParameter('idSeance', $idSeance)
-            ->setParameter('date', $date)
             ->getQuery()
-            ->getSingleResult();
+            ->getSingleScalarResult();
+
     }
 }

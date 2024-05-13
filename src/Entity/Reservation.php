@@ -22,20 +22,18 @@ class Reservation
     private ?int $nombrePlaceResa = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['reservation'])]
+    #[Groups(['info_reservation'])]
     private ?\DateTimeInterface $dateResa = null;
 
     #[ORM\Column]
-    #[Groups(['reservation'])]
+    #[Groups(['info_reservation'])]
     private ?float $montantTotal = null;
 
     #[ORM\ManyToOne(inversedBy: 'reservations')]
-    #[Groups(['reservation'])]
-    private ?Seance $Seance;
+    private ?Seance $Seance = null;
 
-    #[ORM\ManyToOne(inversedBy: 'Reservation')]
-    #[Groups(['reservation'])]
-    private ?User $users;
+    #[ORM\ManyToOne(inversedBy: 'reservations')]
+    private ?User $users = null;
 
     /**
      * @return int|null

@@ -9,7 +9,6 @@ use App\Repository\SeanceRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
-use http\Env\Response;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use function PHPUnit\Framework\throwException;
 
@@ -79,9 +78,8 @@ class ReserverSeance
 
         // seance existe
         $seanceId = $requete->seanceId;
-        $seanceExist = $this->seanceRepository->findOneBy(["id" => $seanceId]);
-        if ($seanceId !== $seanceExist)
-        {
+        $seanceExist = $this->seanceRepository->find($seanceId);
+        if (!$seanceExist) {
             throw new Exception("La séance n'existe pas !");
         }
 
@@ -93,11 +91,22 @@ class ReserverSeance
         }
 
         // nombre place resa <= nombre place dispo
-        $nombrePlacesRestantes = $this->reservationRepository->recupNbPlacesDispo($seanceId);
-        $nombrePlaceDispo = $seanceExist->getSalle()->getNombresPlaces();
+        //places resa
+        $nombrePlacesResa= $this->reservationRepository->findNbPlaceReserverByIdSeance($seanceId);
+        // place total de la salle
+        $nombrePlacetotal = $seanceExist->getSalle()->getNombresPlaces();
 
-        if ($nombrePlacesRestantes['places_restantes'] < $nombrePlaceDispo) {
-            throw new \Exception('Pas asser de places disponibles !');
+        if ($nombrePlacesResa == null)
+        {
+            $nombrePlacesResa = 0;
+        }
+
+        $nbPlaceDispo = $nombrePlacetotal - $nombrePlacesResa;
+        $nbPlaceReserver = $requete->nombrePlaceResa;
+
+        if ($nbPlaceReserver > $nbPlaceDispo)
+        {
+            throw new \Exception("Le nombre de place reservées est supérieur au nombre de place disponnible : il reste $nbPlaceDispo place");
         }
 
         $reservation = new Reservation();

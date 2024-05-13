@@ -13,6 +13,9 @@ class ReserverSeanceRequete
     #[Assert\NotBlank(
         message: "Le nombre de place est obligatoire"
     )]
+    #[Assert\Positive(
+        message: "Le nombre de place doit est positif"
+    )]
     public int $nombrePlaceResa;
 
     /**

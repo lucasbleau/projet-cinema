@@ -15,26 +15,26 @@ class Seance
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['detail'])]
+    #[Groups(['detail', 'seance'])]
     private ?int $id = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['detail'])]
+    #[Groups(['detail', 'seance'])]
     private ?\DateTimeInterface $dateProjection = null;
 
     #[ORM\Column]
-    #[Groups(['detail'])]
+    #[Groups(['detail', 'seance'])]
     private ?float $tarifNormal = null;
 
     #[ORM\Column]
-    #[Groups(['detail'])]
+    #[Groups(['detail', 'seance'])]
     private ?float $tarifReduit = null;
 
     #[ORM\OneToMany(mappedBy: 'Seance', targetEntity: Reservation::class)]
     private Collection $reservations;
 
     #[ORM\ManyToOne(targetEntity: Salle::class, inversedBy: 'seances')]
-//    #[Groups(['detail'])]
+    #[Groups(['seance'])]
     private Salle $Salle;
 
     #[ORM\ManyToOne(targetEntity: Film::class, inversedBy: 'seances')]
